@@ -1,12 +1,19 @@
 from flask import Flask, render_template, request, jsonify
 from ibm_watson import LanguageTranslatorV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import os, sys
+from dotenv import load_dotenv
+
+
 
 app = Flask(__name__)
-
+load_dotenv()
 # Chave de API e URL do IBM Language Translator
-API_KEY = '0EEFeAC_Ta2tLgB_9qqHfh6kG1x5B8dJijFFATwgqpUk'
-URL = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/f163c6bd-ae6e-4c23-87cb-eb8244e17331'
+API_KEY = os.getenv("API_KEY")
+URL= os.getenv("URL")
+
+# API_KEY = '0EEFeAC_Ta2tLgB_9qqHfh6kG1x5B8dJijFFATwgqpUk'
+# URL = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/f163c6bd-ae6e-4c23-87cb-eb8244e17331'
 # Configurar o autenticador e o cliente do IBM Language Translator
 authenticator = IAMAuthenticator(API_KEY)
 language_translator = LanguageTranslatorV3(
