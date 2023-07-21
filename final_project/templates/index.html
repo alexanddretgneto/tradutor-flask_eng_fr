@@ -1,19 +1,41 @@
+<!DOCTYPE html>
 <html>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="./static/mywebscript.js"></script>
-    <div class="card">
-    <div class="card-body">
-        <div class="mb-3">
-            <label class="form-label">Text to be translated</label>
-            <input type="textarea" class="form-control" id="textToTranslate">
-        </div>
-    
-        <div style="padding: 25px 25px 25px 25px;">
-            <button onclick="translateToFrench()" class="btn btn-secondary">Translate to French</button>        
-            <button onclick="translateToEnglish()" class="btn btn-secondary">Translate to English</button>        
-        </div>
-    
-        <div id="translated_text" style="padding: 25px 25px 25px 25px;"></div>
-        </div>
-  </div>
+<head>
+    <title>Tradutor de Inglês e Francês</title>
+</head>
+<body>
+    <h1>Tradutor de Inglês para Francês</h1>
+    <input type="text" id="inputText1" placeholder="Digite o texto em inglês...">
+    <button onclick="traduzir('en_to_fr')">Traduzir para Francês</button>
+    <p>Texto traduzido: <span id="translatedText1"></span></p>
+
+    <h1>Tradutor de Francês para Inglês</h1>
+    <input type="text" id="inputText2" placeholder="Digite o texto em francês...">
+    <button onclick="traduzir('fr_to_en')">Traduzir para Inglês</button>
+    <p>Texto traduzido: <span id="translatedText2"></span></p>
+
+    <script>
+        function traduzir(tipo) {
+            var texto = tipo === 'en_to_fr' ? document.getElementById("inputText1").value : document.getElementById("inputText2").value;
+            var target = tipo === 'en_to_fr' ? 'fr' : 'en';
+            var outputElement = tipo === 'en_to_fr' ? 'translatedText1' : 'translatedText2';
+            
+            fetch('/traduzir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    texto: texto,
+                    target: target
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(outputElement).innerText = data.texto;
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+    </script>
+</body>
 </html>
